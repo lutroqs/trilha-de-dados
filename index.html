@@ -1,0 +1,770 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python do Zero ao Especialista</title>
+<meta name="description" content="Plano de estudos de Python em 4 níveis para Analista de Dados, Engenheiro de Dados, Cientista de Dados e Desenvolvedor Python.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f0; --surface:#ffffff; --ink:#1b1f2a; --muted:#5b6170; --line:#e3dfd6;
+  --blue:#2b5b84; --blue-soft:#e6eef5; --yellow:#f2c230; --yellow-soft:#fbf1cf;
+  --code-bg:#1e2533; --code-ink:#e8ecf3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12151c; --surface:#1a1f29; --ink:#e7e9ee; --muted:#9aa1b0; --line:#2a3140;
+    --blue:#7fb0dc; --blue-soft:#1d2a3a; --yellow:#f2c230; --yellow-soft:#2e2814;
+    --code-bg:#0d1017; --code-ink:#e8ecf3;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12151c; --surface:#1a1f29; --ink:#e7e9ee; --muted:#9aa1b0; --line:#2a3140;
+  --blue:#7fb0dc; --blue-soft:#1d2a3a; --yellow:#f2c230; --yellow-soft:#2e2814;
+  --code-bg:#0d1017; --code-ink:#e8ecf3;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+.hero{border-bottom:1px solid var(--line);background:var(--surface)}
+.hero-inner{max-width:1180px;margin:0 auto;padding:56px 24px 40px}
+.eyebrow{font:600 12px/1 Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--blue)}
+.hero h1{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,60px);line-height:1.05;margin:14px 0 14px;letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(transparent 62%,var(--yellow) 62%)}
+.hero p{max-width:640px;color:var(--muted);font-size:18px;margin:0 0 24px}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:var(--bg)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:36px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.stat{padding:16px 18px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-family:Fraunces,Georgia,serif;font-size:30px;line-height:1.1}
+.stat small{color:var(--muted);font-size:13px}
+.layout{max-width:1180px;margin:0 auto;padding:32px 24px 80px;display:grid;grid-template-columns:230px 1fr;gap:48px}
+nav.toc{position:sticky;top:24px;align-self:start;font-size:14px}
+nav.toc p{font:600 11px/1 Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+nav.toc ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+nav.toc a{display:block;padding:6px 0 6px 14px;margin-left:-2px;border-left:2px solid transparent;color:var(--muted);text-decoration:none}
+nav.toc a:hover,nav.toc a.active{color:var(--ink);border-left-color:var(--yellow)}
+.theme-toggle{margin-top:20px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:6px 10px;font:500 13px Inter;cursor:pointer}
+main{min-width:0}
+section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:28px 32px;margin-bottom:24px}
+section.lesson{border-top:4px solid var(--yellow)}
+h2{font-family:Fraunces,Georgia,serif;font-size:30px;line-height:1.15;margin:0 0 14px;letter-spacing:-.01em;scroll-margin-top:20px}
+h3{font-size:18px;margin:32px 0 8px;padding-top:20px;border-top:1px dashed var(--line)}
+p{margin:0 0 14px}
+ul,ol{padding-left:22px;margin:0 0 14px}
+li{margin:3px 0}
+strong{font-weight:600}
+code{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.88em;background:var(--blue-soft);padding:1px 6px;border-radius:5px}
+pre{background:var(--code-bg);color:var(--code-ink);padding:18px 20px;border-radius:12px;overflow-x:auto;font-size:14px;line-height:1.55;margin:0 0 16px}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+.table-wrap{overflow-x:auto;margin:6px 0 18px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th{text-align:left;font-weight:600;background:var(--blue-soft);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+footer{max-width:1180px;margin:0 auto;padding:0 24px 48px;color:var(--muted);font-size:13px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;gap:16px;padding:20px 16px 60px}
+  nav.toc{position:static;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .hero-inner{padding:36px 16px 28px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  section{padding:22px 18px}
+  h2{font-size:25px}
+}
+@media print{
+  :root{--bg:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#ddd;--blue:#2b5b84;--blue-soft:#eef3f8;--code-bg:#f3f4f6;--code-ink:#111}
+  .actions,nav.toc,.theme-toggle,footer{display:none!important}
+  .layout{display:block;padding:0}
+  .hero{border:0}
+  .hero-inner{padding:0 0 18px}
+  section{border:0;border-radius:0;padding:0;margin:0 0 18px;break-inside:auto}
+  section.lesson{border-top:0;break-before:page}
+  h2{break-after:avoid;border-bottom:2px solid var(--yellow);padding-bottom:6px}
+  h3{break-after:avoid}
+  pre,tr{break-inside:avoid}
+  .table-wrap{overflow:visible;border:0}
+  table{min-width:0;font-size:11px}
+  th,td{border:1px solid #ddd}
+  body{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Plano de estudos · 2026</div>
+    <h1>Python do Zero ao <span>Especialista</span></h1>
+    <p>Um caminho de 12 meses, em 4 níveis, para trabalhar como Analista de Dados, Engenheiro de Dados, Cientista de Dados ou Desenvolvedor Python.</p>
+    <div class="actions">
+      <a class="btn primary" href="slides.html">▶ Ver apresentação</a>
+      <a class="btn" href="python-do-zero-ao-especialista.pdf" download>↓ Baixar PDF</a>
+      <a class="btn" href="#aula-1-logica-de-programacao">Começar a Aula 1</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>30</b><small>tópicos</small></div>
+      <div class="stat"><b>12</b><small>módulos</small></div>
+      <div class="stat"><b>4</b><small>níveis</small></div>
+      <div class="stat"><b>8</b><small>projetos de portfólio</small></div>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="toc" aria-label="Sumário">
+    <p>Sumário</p>
+    <ol>
+<li><a href="#como-funciona-o-curso">Como funciona o curso</a></li>
+<li><a href="#carreiras-alvo-e-salarios-2026">Carreiras-alvo e salários 2026</a></li>
+<li><a href="#nivel-1-iniciante-meses-13">Nível 1 — Iniciante (meses 1–3)</a></li>
+<li><a href="#nivel-2-intermediario-meses-46">Nível 2 — Intermediário (meses 4–6)</a></li>
+<li><a href="#nivel-3-avancado-meses-79">Nível 3 — Avançado (meses 7–9)</a></li>
+<li><a href="#nivel-4-especialista-meses-1012">Nível 4 — Especialista (meses 10–12)</a></li>
+<li><a href="#cronograma-semanal">Cronograma semanal</a></li>
+<li><a href="#portfolio-para-o-github">Portfólio para o GitHub</a></li>
+<li><a href="#aula-1-logica-de-programacao">Aula 1 — Lógica de Programação</a></li>
+    </ol>
+    <button class="theme-toggle" type="button" id="themeBtn">◐ Tema claro/escuro</button>
+  </nav>
+  <main>
+<section class="" aria-labelledby="como-funciona-o-curso"><h2 id="como-funciona-o-curso">Como funciona o curso</h2>
+<p>São 30 tópicos em 4 níveis e 12 módulos, em cerca de 12 meses com 10–12 h por semana. Cada aula segue sempre as mesmas 15 etapas, e cada módulo fecha com uma avaliação completa.</p>
+<p><strong>As 15 etapas de cada aula</strong></p>
+<ol>
+<li>Explicação como se você tivesse 10 anos</li>
+<li>Explicação técnica</li>
+<li>Exemplos reais (código comentado)</li>
+<li>Como empresas usam</li>
+<li>Erros comuns</li>
+<li>Analogias simples</li>
+<li>Resumo</li>
+<li>Flashcards</li>
+<li>Mapa mental com setas</li>
+<li>Exercícios básicos</li>
+<li>Exercícios intermediários</li>
+<li>Exercícios avançados</li>
+<li>Mini projeto</li>
+<li>Desafio empresarial</li>
+<li>Correção das suas respostas (você envia no chat, eu corrijo linha a linha)</li>
+</ol>
+<p>Toda aula abre com um cartão fixo: <strong>→ Para que serve · → Onde é utilizado · → Salário médio da área · → Ferramentas relacionadas · → Empresas que utilizam.</strong></p>
+<p><strong>Fechamento de cada módulo:</strong> prova (15 questões + 2 práticas), gabarito comentado, resumo executivo, plano de revisão espaçada (1, 3, 7 e 21 dias), questões de entrevista e um estudo de caso empresarial.</p>
+<p><strong>Como estudar comigo:</strong> peça no chat “próxima aula” ou o nome do tópico. Responda os exercícios numerados (ex.: <code>B1</code>, <code>I2</code>, <code>A1</code>) e eu corrijo, dou nota de 0 a 10 e mostro a versão profissional do código. Só avance quando acertar 80% ou mais.</p>
+</section>
+<section class="" aria-labelledby="carreiras-alvo-e-salarios-2026"><h2 id="carreiras-alvo-e-salarios-2026">Carreiras-alvo e salários 2026</h2>
+<p>As quatro carreiras usam a mesma base (Python + SQL + Git) e se separam a partir do nível Avançado. Faixas mensais CLT no Brasil, 2026; vagas remotas internacionais pagam 2 a 3 vezes mais.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Carreira</th>
+<th>Júnior (R$/mês)</th>
+<th>Pleno (R$/mês)</th>
+<th>Sênior (R$/mês)</th>
+<th>Foco do trabalho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Analista de Dados</td>
+<td>4.000 – 7.000</td>
+<td>7.000 – 12.000</td>
+<td>12.000 – 18.000</td>
+<td>SQL, Pandas, dashboards, perguntas de negócio</td>
+</tr>
+<tr>
+<td>Engenheiro de Dados</td>
+<td>6.000 – 10.000</td>
+<td>12.000 – 18.000</td>
+<td>15.000 – 28.000</td>
+<td>Pipelines, nuvem, bancos de dados, Docker</td>
+</tr>
+<tr>
+<td>Cientista de Dados</td>
+<td>5.000 – 8.500</td>
+<td>9.000 – 15.000</td>
+<td>16.000 – 25.000</td>
+<td>Estatística, Machine Learning, IA</td>
+</tr>
+<tr>
+<td>Desenvolvedor Python</td>
+<td>4.000 – 7.000</td>
+<td>8.000 – 14.000</td>
+<td>15.000 – 25.000</td>
+<td>APIs (FastAPI), backend, automação</td>
+</tr>
+</tbody>
+</table></div>
+<p>Empresas como Itaú, Nubank e iFood costumam pagar acima dessas faixas. Valores do Engenheiro de Dados júnior e do Analista sênior são estimativas interpoladas das fontes abaixo.</p>
+<p>Fontes: <a href="https://jobrise.io/pt/blog/mercado-de-tech-no-brasil-2026-vai-contratar/">Jobrise – Mercado tech 2026</a> · <a href="https://jobrise.io/pt/blog/salario-cientista-de-dados-brasil-2026/">Jobrise – Cientista de Dados 2026</a> · <a href="https://jobrise.io/pt/blog/python-developer-vagas-sao-paulo/">Jobrise – Python Developer SP 2026</a> · <a href="https://monitordomercado.com.br/noticias/342106-traduzir-dados-complexos-em-lucro-para-as-empresas-coloca-o-cientista-de-dados-no-topo-da-lista-de-desejos-de-qualquer-recrutador-hoje-em-dia/">Monitor do Mercado – Dados e BI</a></p>
+</section>
+<section class="" aria-labelledby="nivel-1-iniciante-meses-13"><h2 id="nivel-1-iniciante-meses-13">Nível 1 — Iniciante (meses 1–3)</h2>
+<p>Meta: escrever programas completos sozinho e versionar tudo no GitHub. Ao final você consegue automatizar planilhas simples e resolver testes de lógica de entrevistas júnior.</p>
+<p><strong>Módulo 1 — Fundamentos</strong> (lógica, variáveis, operadores, condicionais, loops)</p>
+<p><strong>Módulo 2 — Estruturas e funções</strong> (funções, listas, tuplas, dicionários, sets)</p>
+<p><strong>Módulo 3 — Programas robustos</strong> (arquivos, tratamento de erros, Git e GitHub)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tópico</th>
+<th>Para que serve</th>
+<th>Onde é utilizado</th>
+<th>Ferramentas</th>
+<th>Empresas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lógica de programação</td>
+<td>Quebrar problemas em passos que o computador executa</td>
+<td>Toda vaga de tecnologia; testes técnicos</td>
+<td>Fluxogramas, pseudocódigo, VS Code</td>
+<td>Todas; testes da Stone, Itaú, Mercado Livre</td>
+</tr>
+<tr>
+<td>Variáveis</td>
+<td>Guardar e nomear informações</td>
+<td>Qualquer script ou sistema</td>
+<td>Python 3.12+, VS Code, Jupyter</td>
+<td>Todas</td>
+</tr>
+<tr>
+<td>Operadores</td>
+<td>Calcular, comparar e combinar condições</td>
+<td>Regras de negócio, cálculos financeiros</td>
+<td>Python, Jupyter</td>
+<td>Bancos (juros), varejo (descontos)</td>
+</tr>
+<tr>
+<td>Condicionais</td>
+<td>Tomar decisões no código</td>
+<td>Aprovação de crédito, alertas, validações</td>
+<td>Python</td>
+<td>Nubank, PicPay, seguradoras</td>
+</tr>
+<tr>
+<td>Loops</td>
+<td>Repetir tarefas milhares de vezes</td>
+<td>Processar arquivos, linhas, clientes</td>
+<td>Python, tqdm</td>
+<td>Todas que processam lotes</td>
+</tr>
+<tr>
+<td>Funções</td>
+<td>Reaproveitar e organizar código</td>
+<td>Toda base de código profissional</td>
+<td>Python, pytest</td>
+<td>Todas</td>
+</tr>
+<tr>
+<td>Listas</td>
+<td>Coleções ordenadas e mutáveis</td>
+<td>Filas de pedidos, resultados de consultas</td>
+<td>Python</td>
+<td>iFood, Magalu</td>
+</tr>
+<tr>
+<td>Tuplas</td>
+<td>Dados fixos e seguros</td>
+<td>Coordenadas, registros de banco</td>
+<td>Python</td>
+<td>Uber, 99 (geolocalização)</td>
+</tr>
+<tr>
+<td>Dicionários</td>
+<td>Dados por chave (como JSON)</td>
+<td>APIs, configurações, cadastros</td>
+<td>Python, json</td>
+<td>Todas que usam APIs</td>
+</tr>
+<tr>
+<td>Sets</td>
+<td>Valores únicos e comparação de grupos</td>
+<td>Remover duplicados, cruzar clientes</td>
+<td>Python</td>
+<td>E-commerces, CRMs</td>
+</tr>
+<tr>
+<td>Arquivos</td>
+<td>Ler e gravar TXT, CSV, JSON</td>
+<td>Integrações, relatórios, logs</td>
+<td>pathlib, csv, json</td>
+<td>Bancos, ERPs (TOTVS)</td>
+</tr>
+<tr>
+<td>Tratamento de erros</td>
+<td>Programas que não quebram</td>
+<td>Pipelines e sistemas em produção</td>
+<td>try/except, logging</td>
+<td>Todas em produção</td>
+</tr>
+<tr>
+<td>Git e GitHub</td>
+<td>Versionar e colaborar</td>
+<td>100% das equipes de software</td>
+<td>Git, GitHub, VS Code</td>
+<td>Microsoft, Google, Nubank</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Salário de referência:</strong> estágio R$ 1.500 – 3.000; júnior R$ 3.500 – 7.000 (Python + SQL + Git).</p>
+</section>
+<section class="" aria-labelledby="nivel-2-intermediario-meses-46"><h2 id="nivel-2-intermediario-meses-46">Nível 2 — Intermediário (meses 4–6)</h2>
+<p>Meta: analisar dados reais de ponta a ponta — buscar, limpar, consultar e visualizar. Este é o nível que já qualifica para vagas de Analista de Dados júnior.</p>
+<p><strong>Módulo 4 — POO e integrações</strong> (Programação Orientada a Objetos, APIs, Web Scraping)</p>
+<p><strong>Módulo 5 — Dados com Python</strong> (SQL com Python, NumPy, Pandas)</p>
+<p><strong>Módulo 6 — Visualização</strong> (Matplotlib, Seaborn)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tópico</th>
+<th>Para que serve</th>
+<th>Onde é utilizado</th>
+<th>Ferramentas</th>
+<th>Empresas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POO</td>
+<td>Modelar sistemas com classes e objetos</td>
+<td>Sistemas grandes, bibliotecas, APIs</td>
+<td>class, dataclasses, pydantic</td>
+<td>Todas com software próprio</td>
+</tr>
+<tr>
+<td>APIs</td>
+<td>Trocar dados entre sistemas</td>
+<td>Cotações, pagamentos, CRM, ERP</td>
+<td>requests, httpx, Postman</td>
+<td>Banco Central (API PIX/Selic), Mercado Pago</td>
+</tr>
+<tr>
+<td>Web Scraping</td>
+<td>Coletar dados de sites</td>
+<td>Monitorar preços, concorrentes, vagas</td>
+<td>BeautifulSoup, Playwright, Scrapy</td>
+<td>Buscapé, Zoom, consultorias</td>
+</tr>
+<tr>
+<td>SQL com Python</td>
+<td>Consultar bancos direto do código</td>
+<td>Todo trabalho com dados</td>
+<td>sqlite3, SQLAlchemy, PostgreSQL</td>
+<td>Itaú, Ambev, Natura</td>
+</tr>
+<tr>
+<td>NumPy</td>
+<td>Cálculo numérico rápido</td>
+<td>Base do Pandas e do ML</td>
+<td>NumPy, Jupyter</td>
+<td>Toda área de dados</td>
+</tr>
+<tr>
+<td>Pandas</td>
+<td>Limpar, transformar e analisar tabelas</td>
+<td>Relatórios, análises, ETL</td>
+<td>Pandas, Polars, Jupyter</td>
+<td>Nubank, iFood, Magalu, Ambev</td>
+</tr>
+<tr>
+<td>Matplotlib</td>
+<td>Gráficos com controle total</td>
+<td>Relatórios técnicos e científicos</td>
+<td>Matplotlib</td>
+<td>Pesquisa, bancos</td>
+</tr>
+<tr>
+<td>Seaborn</td>
+<td>Gráficos estatísticos bonitos e rápidos</td>
+<td>Análise exploratória</td>
+<td>Seaborn</td>
+<td>Times de Data Science</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Salário de referência:</strong> Analista de Dados júnior R$ 4.000 – 7.000; pleno R$ 7.000 – 12.000.</p>
+</section>
+<section class="" aria-labelledby="nivel-3-avancado-meses-79"><h2 id="nivel-3-avancado-meses-79">Nível 3 — Avançado (meses 7–9)</h2>
+<p>Meta: entregar produtos de dados que outras pessoas usam — relatórios automáticos, dashboards e integrações com BI. Aqui você escolhe sua trilha principal (Análise ou Engenharia).</p>
+<p><strong>Módulo 7 — Excel e BI</strong> (Excel com Python, Power BI com Python)</p>
+<p><strong>Módulo 8 — Automação</strong> (automação de tarefas: arquivos, e-mails, agendamentos, web)</p>
+<p><strong>Módulo 9 — Apps de dados</strong> (Streamlit, Dashboards)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tópico</th>
+<th>Para que serve</th>
+<th>Onde é utilizado</th>
+<th>Ferramentas</th>
+<th>Empresas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excel com Python</td>
+<td>Ler, gerar e formatar planilhas automaticamente</td>
+<td>Financeiro, controladoria, RH</td>
+<td>openpyxl, xlsxwriter, Pandas, xlwings</td>
+<td>Bancos, varejo, indústria, Big Four</td>
+</tr>
+<tr>
+<td>Power BI com Python</td>
+<td>Preparar dados e criar visuais avançados no BI</td>
+<td>Relatórios gerenciais</td>
+<td>Power BI, Power Query, scripts Python</td>
+<td>Ambev, Raízen, Vale, Itaú</td>
+</tr>
+<tr>
+<td>Automação de tarefas</td>
+<td>Eliminar trabalho manual repetitivo</td>
+<td>Backoffice, conciliações, relatórios diários</td>
+<td>schedule, smtplib, Playwright, pyautogui</td>
+<td>Todas (RPA é área própria)</td>
+</tr>
+<tr>
+<td>Streamlit</td>
+<td>Transformar scripts em apps web</td>
+<td>Protótipos, ferramentas internas</td>
+<td>Streamlit, Plotly</td>
+<td>Startups, times de dados</td>
+</tr>
+<tr>
+<td>Dashboards</td>
+<td>Mostrar KPIs para decisão</td>
+<td>Diretoria, vendas, operações</td>
+<td>Streamlit, Dash, Plotly, Power BI</td>
+<td>Toda empresa orientada a dados</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Salário de referência:</strong> Analista de Dados pleno R$ 7.000 – 12.000; Analista de BI júnior R$ 5.500 – 8.500.</p>
+</section>
+<section class="" aria-labelledby="nivel-4-especialista-meses-1012"><h2 id="nivel-4-especialista-meses-1012">Nível 4 — Especialista (meses 10–12)</h2>
+<p>Meta: colocar modelos e serviços em produção, como em um time profissional. Este nível separa o júnior do pleno nas entrevistas.</p>
+<p><strong>Módulo 10 — Machine Learning</strong> (scikit-learn, avaliação de modelos, pipelines)</p>
+<p><strong>Módulo 11 — IA Generativa</strong> (LLMs via API, RAG, agentes simples)</p>
+<p><strong>Módulo 12 — Produção</strong> (FastAPI, Docker, deploy)</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tópico</th>
+<th>Para que serve</th>
+<th>Onde é utilizado</th>
+<th>Ferramentas</th>
+<th>Empresas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Machine Learning</td>
+<td>Prever resultados a partir de dados</td>
+<td>Crédito, churn, fraude, recomendação</td>
+<td>scikit-learn, XGBoost, MLflow</td>
+<td>Nubank, Itaú, iFood, Mercado Livre</td>
+</tr>
+<tr>
+<td>IA Generativa</td>
+<td>Gerar texto, resumir, responder sobre documentos</td>
+<td>Atendimento, busca interna, automação de documentos</td>
+<td>APIs de LLM (Claude, OpenAI), LangChain, bancos vetoriais</td>
+<td>Bradesco, Itaú, startups de IA</td>
+</tr>
+<tr>
+<td>FastAPI</td>
+<td>Expor código e modelos como API</td>
+<td>Backend, servir modelos de ML</td>
+<td>FastAPI, Pydantic, Uvicorn</td>
+<td>Netflix, Uber, Microsoft, fintechs</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>Rodar o mesmo ambiente em qualquer lugar</td>
+<td>Deploy, pipelines, microserviços</td>
+<td>Docker, Docker Compose, Kubernetes</td>
+<td>Praticamente todas em nuvem</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Salário de referência:</strong> Cientista de Dados pleno R$ 9.000 – 15.000; Engenheiro de Dados pleno R$ 12.000 – 18.000; sênior até R$ 25.000 – 30.000.</p>
+</section>
+<section class="" aria-labelledby="cronograma-semanal"><h2 id="cronograma-semanal">Cronograma semanal</h2>
+<p>Rotina de 11 horas por semana, um tópico a cada 1–2 semanas. Constância vence intensidade: 1h30 por dia rende mais que 10 horas num só sábado.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Dia</th>
+<th>Tempo</th>
+<th>Atividade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Segunda</td>
+<td>1h30</td>
+<td>Etapas 1–7: teoria, exemplos, erros comuns, resumo</td>
+</tr>
+<tr>
+<td>Terça</td>
+<td>1h30</td>
+<td>Digitar e rodar todos os exemplos (nunca copiar e colar)</td>
+</tr>
+<tr>
+<td>Quarta</td>
+<td>1h30</td>
+<td>Exercícios básicos e intermediários + envio para correção</td>
+</tr>
+<tr>
+<td>Quinta</td>
+<td>1h30</td>
+<td>Exercícios avançados + revisão dos flashcards</td>
+</tr>
+<tr>
+<td>Sexta</td>
+<td>1h</td>
+<td>Revisão espaçada de tópicos antigos</td>
+</tr>
+<tr>
+<td>Sábado</td>
+<td>3h</td>
+<td>Mini projeto + desafio empresarial, commit no GitHub</td>
+</tr>
+<tr>
+<td>Domingo</td>
+<td>1h</td>
+<td>Descanso ativo: ler código de outros no GitHub ou um artigo técnico</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Regras de ouro</strong></p>
+<ul>
+<li>Escreva código todos os dias, mesmo 15 minutos.</li>
+<li>Errou? Leia a mensagem de erro inteira antes de pedir ajuda.</li>
+<li>Cada mini projeto vira um repositório com README.</li>
+<li>Estude SQL em paralelo desde o Módulo 3: ele aparece em quase toda vaga de dados.</li>
+</ul>
+</section>
+<section class="" aria-labelledby="portfolio-para-o-github"><h2 id="portfolio-para-o-github">Portfólio para o GitHub</h2>
+<p>Ao final você terá 8 projetos publicados, cada um ligado a uma carreira-alvo. Recrutadores olham o GitHub antes do currículo em vagas júnior.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>Projeto</th>
+<th>Nível</th>
+<th>Carreira que comprova</th>
+<th>Tecnologias</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Calculadora de salário líquido (INSS + IR)</td>
+<td>Iniciante</td>
+<td>Dev Python</td>
+<td>Funções, condicionais</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Organizador automático de pastas e relatórios</td>
+<td>Iniciante</td>
+<td>Automação</td>
+<td>Arquivos, erros, Git</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Monitor de preços com alerta por e-mail</td>
+<td>Intermediário</td>
+<td>Engenharia de Dados</td>
+<td>Scraping, APIs, SQL</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Análise de vendas de um e-commerce (dataset Olist)</td>
+<td>Intermediário</td>
+<td>Analista de Dados</td>
+<td>Pandas, SQL, Seaborn</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Relatório Excel mensal gerado com um clique</td>
+<td>Avançado</td>
+<td>Analista / BI</td>
+<td>openpyxl, Pandas</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Dashboard de KPIs em Streamlit publicado online</td>
+<td>Avançado</td>
+<td>Analista de Dados</td>
+<td>Streamlit, Plotly</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Modelo de previsão de churn com API</td>
+<td>Especialista</td>
+<td>Cientista de Dados</td>
+<td>scikit-learn, FastAPI</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Assistente de perguntas sobre PDFs (RAG) em Docker</td>
+<td>Especialista</td>
+<td>Dev Python / IA</td>
+<td>LLM API, FastAPI, Docker</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section class="lesson" aria-labelledby="aula-1-logica-de-programacao"><h2 id="aula-1-logica-de-programacao">Aula 1 — Lógica de Programação</h2>
+<p>Lógica é a habilidade de transformar um problema em passos pequenos, claros e em ordem. É a base de todos os outros 29 tópicos.</p>
+<p><strong>→ Para que serve:</strong> resolver qualquer problema com código. <strong>→ Onde é utilizado:</strong> em toda vaga de tecnologia e em todos os testes técnicos. <strong>→ Salário médio:</strong> júnior R$ 3.500 – 7.000. <strong>→ Ferramentas:</strong> pseudocódigo, fluxogramas (draw.io), Python, VS Code. <strong>→ Empresas:</strong> todas; Itaú, Mercado Livre e Stone usam testes de lógica na seleção.</p>
+<h3 id="1-como-se-voce-tivesse-10-anos">1. Como se você tivesse 10 anos</h3>
+<p>O computador é um robô muito obediente, mas que não pensa sozinho. Se você mandar “faz um sanduíche”, ele trava. Você precisa dizer: pegue o pão, abra o pão, passe manteiga, coloque o queijo, feche o pão. Lógica é aprender a dar ordens tão claras que até o robô entende.</p>
+<h3 id="2-explicacao-tecnica">2. Explicação técnica</h3>
+<p>Um <strong>algoritmo</strong> é uma sequência finita e ordenada de instruções que leva uma <strong>entrada</strong> a uma <strong>saída</strong>. Todo algoritmo combina só três estruturas:</p>
+<ul>
+<li><strong>Sequência:</strong> instruções executadas uma após a outra.</li>
+<li><strong>Decisão (seleção):</strong> escolher um caminho conforme uma condição verdadeira ou falsa (<code>if</code>).</li>
+<li><strong>Repetição (iteração):</strong> repetir um bloco enquanto uma condição valer (<code>for</code>, <code>while</code>).</li>
+</ul>
+<p>O processo profissional é: entender o problema → definir entrada e saída → escrever em pseudocódigo → testar à mão → só então codificar.</p>
+<h3 id="3-exemplos-reais">3. Exemplos reais</h3>
+<pre><code class="language-python"># Problema: dizer se um aluno foi aprovado (média &gt;= 7)
+# Entrada: duas notas | Saída: mensagem
+
+nota1 = float(input(&quot;Nota 1: &quot;))   # sequência
+nota2 = float(input(&quot;Nota 2: &quot;))
+media = (nota1 + nota2) / 2
+
+if media &gt;= 7:                       # decisão
+    print(f&quot;Aprovado com média {media:.1f}&quot;)
+else:
+    print(f&quot;Reprovado com média {media:.1f}&quot;)
+</code></pre>
+<pre><code class="language-python"># Repetição: somar as vendas da semana
+vendas = [1200, 950, 1800, 700, 2100]
+total = 0
+for valor in vendas:
+    total = total + valor
+print(&quot;Total da semana:&quot;, total)    # 6750
+</code></pre>
+<h3 id="4-como-empresas-usam">4. Como empresas usam</h3>
+<ul>
+<li><strong>Banco (Nubank, Itaú):</strong> SE renda ≥ 3× parcela E score ≥ 600 ENTÃO aprova crédito SENÃO recusa.</li>
+<li><strong>iFood:</strong> PARA CADA entregador próximo, calcule a distância e escolha o menor tempo estimado.</li>
+<li><strong>E-commerce (Magalu):</strong> SE carrinho ≥ R$ 199 ENTÃO frete grátis.</li>
+<li><strong>RH:</strong> PARA CADA funcionário, calcule horas extras e gere o holerite.</li>
+</ul>
+<h3 id="5-erros-comuns">5. Erros comuns</h3>
+<ul>
+<li>Começar a programar antes de entender o problema.</li>
+<li>Esquecer casos extremos: nota negativa, lista vazia, divisão por zero.</li>
+<li>Errar a ordem dos passos (calcular a média antes de ler as notas).</li>
+<li>Usar <code>&gt;</code> quando o certo era <code>&gt;=</code> (aluno com 7,0 reprovado).</li>
+<li>Criar loop infinito ao esquecer de atualizar a condição do <code>while</code>.</li>
+</ul>
+<h3 id="6-analogias">6. Analogias</h3>
+<ul>
+<li><strong>Receita de bolo</strong> = algoritmo (ingredientes = entrada, bolo = saída).</li>
+<li><strong>Semáforo</strong> = decisão (verde segue, vermelho para).</li>
+<li><strong>Lavar a louça prato por prato</strong> = repetição.</li>
+<li><strong>GPS</strong> = vários caminhos possíveis; lógica é escolher o melhor.</li>
+</ul>
+<h3 id="7-resumo">7. Resumo</h3>
+<p>Lógica = entrada → processamento → saída, usando sequência, decisão e repetição. Pense primeiro, codifique depois e sempre teste os casos extremos.</p>
+<h3 id="8-flashcards">8. Flashcards</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Frente</th>
+<th>Verso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O que é um algoritmo?</td>
+<td>Sequência finita e ordenada de passos que resolve um problema</td>
+</tr>
+<tr>
+<td>Quais as 3 estruturas da lógica?</td>
+<td>Sequência, decisão e repetição</td>
+</tr>
+<tr>
+<td>O que é pseudocódigo?</td>
+<td>O algoritmo escrito em linguagem humana, antes do código</td>
+</tr>
+<tr>
+<td>O que é caso extremo?</td>
+<td>Entrada incomum que pode quebrar o programa (vazio, zero, negativo)</td>
+</tr>
+<tr>
+<td>Por que testar à mão?</td>
+<td>Para achar erros de lógica antes de escrever código</td>
+</tr>
+<tr>
+<td>Diferença entre <code>for</code> e <code>while</code>?</td>
+<td><code>for</code> repete um número conhecido de vezes; <code>while</code> repete enquanto uma condição for verdadeira</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="9-mapa-mental">9. Mapa mental</h3>
+<pre><code class="language-text">LÓGICA DE PROGRAMAÇÃO
+ ├─→ Problema → Entrada → Processamento → Saída
+ ├─→ Sequência → um passo após o outro
+ ├─→ Decisão → if / elif / else → condição Verdadeira ou Falsa
+ ├─→ Repetição → for (quantidade conhecida)
+ │             → while (até a condição mudar) → cuidado: loop infinito
+ └─→ Método → entender → pseudocódigo → teste à mão → código → testar extremos
+</code></pre>
+<h3 id="10-exercicios-basicos">10. Exercícios básicos</h3>
+<ul>
+<li><strong>B1.</strong> Escreva em pseudocódigo os passos para sacar dinheiro num caixa eletrônico.</li>
+<li><strong>B2.</strong> Leia um número e diga se ele é par ou ímpar.</li>
+<li><strong>B3.</strong> Leia a idade de uma pessoa e diga se ela pode votar (16+), se é obrigatório (18 a 70) ou se é facultativo.</li>
+</ul>
+<h3 id="11-exercicios-intermediarios">11. Exercícios intermediários</h3>
+<ul>
+<li><strong>I1.</strong> Leia 5 números e mostre o maior e o menor, sem usar <code>max()</code> e <code>min()</code>.</li>
+<li><strong>I2.</strong> Mostre a tabuada de qualquer número de 1 a 10.</li>
+<li><strong>I3.</strong> Peça uma senha até o usuário acertar, com no máximo 3 tentativas.</li>
+</ul>
+<h3 id="12-exercicios-avancados">12. Exercícios avançados</h3>
+<ul>
+<li><strong>A1.</strong> Diga se um número é primo, testando divisores só até a raiz quadrada dele. Explique por que isso basta.</li>
+<li><strong>A2.</strong> Calcule o troco de uma compra usando o menor número de cédulas e moedas (R$ 100, 50, 20, 10, 5, 2, 1).</li>
+<li><strong>A3.</strong> Implemente o jogo “adivinhe o número” (1 a 100) que diz “maior” ou “menor” e conta as tentativas.</li>
+</ul>
+<h3 id="13-mini-projeto-calculadora-de-salario-liquido">13. Mini projeto — Calculadora de salário líquido</h3>
+<p>Leia o salário bruto, desconte INSS e IR por faixas (use as tabelas oficiais vigentes) e mostre bruto, descontos e líquido. Trate entradas inválidas (texto, valor negativo). Publique no GitHub com um README.</p>
+<h3 id="14-desafio-empresarial-regras-de-credito">14. Desafio empresarial — Regras de crédito</h3>
+<p>Uma fintech aprova empréstimos assim: renda ≥ R$ 2.000; parcela ≤ 30% da renda; sem dívida em atraso; idade entre 18 e 75. Escreva o pseudocódigo e depois o Python que recebe os dados do cliente e responde “Aprovado” ou o <strong>motivo exato</strong> da recusa. Liste 5 casos de teste, incluindo extremos (renda exatamente R$ 2.000, parcela exatamente 30%).</p>
+<h3 id="15-correcao">15. Correção</h3>
+<p>Envie no chat suas respostas com o código (ex.: “B1: …”). Corrijo cada uma com nota de 0 a 10, aponto erros de lógica e de estilo e mostro a solução como um profissional escreveria.</p></section>
+  </main>
+</div>
+<footer>Material de estudo pessoal · faixas salariais com fontes citadas na seção de carreiras.</footer>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  try{var saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);}catch(e){}
+  btn.addEventListener('click',function(){
+    var dark = root.getAttribute('data-theme')==='dark' ||
+      (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = dark?'light':'dark'; root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  var obs=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id);});}
+  });},{rootMargin:'0px 0px -70% 0px'});
+  document.querySelectorAll('h2[id]').forEach(function(h){obs.observe(h);});
+})();
+</script>
+</body>
+</html>

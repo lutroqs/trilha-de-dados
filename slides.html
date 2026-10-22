@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python do Zero ao Especialista — Slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1218; --slide:#f7f5f0; --ink:#1b1f2a; --muted:#5b6170; --line:#e3dfd6;
+  --blue:#2b5b84; --blue-soft:#e6eef5; --yellow:#f2c230; --yellow-soft:#fbf1cf;
+  --code-bg:#1e2533; --code-ink:#e8ecf3;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0a0c10; } }
+:root[data-theme="dark"]{ --bg:#0a0c10; }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);overflow:hidden}
+body{font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+.stage{position:fixed;inset:0;display:grid;place-items:center}
+.deck{width:1280px;height:720px;position:relative;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--slide);border-radius:14px;padding:64px 80px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.slide.active{display:flex}
+.slide.dark{background:#1b1f2a;color:#f3f1ea}
+.slide.dark .muted{color:#aeb4c2}
+.kicker{font:600 14px/1 Inter;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:18px}
+.dark .kicker{color:var(--yellow)}
+h1,h2{font-family:Fraunces,Georgia,serif;letter-spacing:-.02em;margin:0}
+h1{font-size:84px;line-height:1.02}
+h2{font-size:50px;line-height:1.08;margin-bottom:28px}
+h1 span,h2 span{background:linear-gradient(transparent 64%,var(--yellow) 64%)}
+.dark h1 span{background:linear-gradient(transparent 64%,rgba(242,194,48,.55) 64%)}
+p,li{font-size:24px;line-height:1.45}
+.muted{color:var(--muted)}
+.lead{font-size:28px;max-width:900px}
+ul{margin:0;padding-left:28px}
+li{margin:6px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.card h3{font:600 22px/1.25 Inter;margin:0 0 8px}
+.card p,.card li{font-size:19px;line-height:1.4;margin:0}
+.card .tag{font:600 13px/1 Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;display:block}
+.card.hl{border-top:5px solid var(--yellow)}
+table{border-collapse:collapse;width:100%;font-size:20px}
+th{text-align:left;background:var(--blue-soft);padding:12px 14px;font-weight:600}
+td{padding:12px 14px;border-bottom:1px solid var(--line)}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:s}
+.steps div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 14px 16px;font-size:17px;line-height:1.3;counter-increment:s}
+.steps div::before{content:counter(s);display:block;font:700 26px Fraunces,Georgia,serif;color:var(--blue);margin-bottom:6px}
+.road{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:10px;position:relative}
+.road::before{content:"";position:absolute;left:0;right:0;top:22px;height:4px;background:var(--line)}
+.road .lv{position:relative;padding-right:22px}
+.road .dot{width:48px;height:48px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font:700 22px Fraunces,Georgia,serif;position:relative}
+.road .lv h3{font:600 24px/1.2 Inter;margin:18px 0 4px}
+.road .lv .when{font-size:16px;color:var(--blue);font-weight:600;margin-bottom:10px}
+.road .lv p{font-size:18px;line-height:1.4}
+pre{background:var(--code-bg);color:var(--code-ink);border-radius:14px;padding:22px 26px;font:400 19px/1.55 "JetBrains Mono",monospace;margin:0;white-space:pre}
+.c{color:#8c96a8}
+.k{color:#f2c230}
+.s{color:#9fd39b}
+.n{color:#7fb0dc}
+.foot{position:absolute;left:80px;right:80px;bottom:28px;display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.dark .foot{color:#8f95a3}
+.big-num{font:700 64px/1 Fraunces,Georgia,serif;color:var(--blue)}
+.controls{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:8px;align-items:center;background:rgba(20,24,32,.85);color:#e7e9ee;border-radius:999px;padding:6px 8px;font:500 14px Inter;z-index:5}
+.controls button,.controls a{background:none;border:0;color:inherit;font:inherit;padding:8px 12px;border-radius:999px;cursor:pointer;text-decoration:none}
+.controls button:hover,.controls a:hover{background:rgba(255,255,255,.12)}
+.progress{position:fixed;top:0;left:0;height:4px;background:var(--yellow);z-index:5;transition:width .2s}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{overflow:visible;height:auto;background:#fff}
+  .stage{position:static;display:block}
+  .deck{transform:none!important;width:auto;height:auto}
+  .slide{display:flex!important;position:relative;width:1280px;height:720px;border-radius:0;box-shadow:none;break-after:page}
+  .controls,.progress{display:none}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="stage">
+<div class="deck" id="deck">
+
+<!-- 1 -->
+<section class="slide dark">
+  <div class="kicker">Plano de estudos · 2026</div>
+  <h1>Python do Zero<br>ao <span>Especialista</span></h1>
+  <p class="lead muted" style="margin-top:28px">12 meses · 4 níveis · 30 tópicos · 8 projetos de portfólio</p>
+  <p class="muted" style="margin-top:auto;font-size:20px">Objetivo: Analista de Dados · Engenheiro de Dados · Cientista de Dados · Desenvolvedor Python</p>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="kicker">Aonde vamos chegar</div>
+  <h2>Uma base, <span>quatro carreiras</span></h2>
+  <div class="grid4">
+    <div class="card hl"><span class="tag">Analista de Dados</span><p>SQL, Pandas, dashboards e perguntas de negócio.</p></div>
+    <div class="card hl"><span class="tag">Engenheiro de Dados</span><p>Pipelines, nuvem, bancos de dados e Docker.</p></div>
+    <div class="card hl"><span class="tag">Cientista de Dados</span><p>Estatística, Machine Learning e IA.</p></div>
+    <div class="card hl"><span class="tag">Dev Python</span><p>APIs com FastAPI, backend e automação.</p></div>
+  </div>
+  <p class="muted" style="margin-top:32px">Todas usam Python + SQL + Git. As trilhas se separam a partir do nível Avançado.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>2</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="kicker">Mercado brasileiro · CLT · 2026</div>
+  <h2>Quanto paga cada carreira</h2>
+  <table>
+    <thead><tr><th>Carreira</th><th>Júnior (R$/mês)</th><th>Pleno (R$/mês)</th><th>Sênior (R$/mês)</th></tr></thead>
+    <tbody>
+      <tr><td>Analista de Dados</td><td class="num">4.000 – 7.000</td><td class="num">7.000 – 12.000</td><td class="num">12.000 – 18.000</td></tr>
+      <tr><td>Engenheiro de Dados</td><td class="num">6.000 – 10.000</td><td class="num">12.000 – 18.000</td><td class="num">15.000 – 28.000</td></tr>
+      <tr><td>Cientista de Dados</td><td class="num">5.000 – 8.500</td><td class="num">9.000 – 15.000</td><td class="num">16.000 – 25.000</td></tr>
+      <tr><td>Desenvolvedor Python</td><td class="num">4.000 – 7.000</td><td class="num">8.000 – 14.000</td><td class="num">15.000 – 25.000</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="font-size:16px;margin-top:18px">Vagas remotas internacionais pagam 2 a 3× mais. Fontes: Jobrise (2026), Monitor do Mercado (2026).</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="kicker">O método</div>
+  <h2>Toda aula tem <span>15 etapas</span></h2>
+  <div class="steps">
+    <div>Como se eu tivesse 10 anos</div><div>Explicação técnica</div><div>Exemplos reais</div><div>Como empresas usam</div><div>Erros comuns</div>
+    <div>Analogias</div><div>Resumo</div><div>Flashcards</div><div>Mapa mental</div><div>Exercícios básicos</div>
+    <div>Exercícios intermediários</div><div>Exercícios avançados</div><div>Mini projeto</div><div>Desafio empresarial</div><div>Correção das respostas</div>
+  </div>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="kicker">Em toda aula e todo módulo</div>
+  <h2>O que nunca falta</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Cartão de abertura da aula</h3>
+      <ul>
+        <li>→ Para que serve</li><li>→ Onde é utilizado</li><li>→ Salário médio da área</li><li>→ Ferramentas relacionadas</li><li>→ Empresas que utilizam</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Fechamento do módulo</h3>
+      <ul>
+        <li>Prova + gabarito comentado</li><li>Resumo executivo</li><li>Revisão espaçada: 1, 3, 7 e 21 dias</li><li>Questões de entrevista</li><li>Estudo de caso empresarial</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:24px">Regra para avançar: acertar 80% ou mais dos exercícios.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="kicker">Roteiro de 12 meses</div>
+  <h2>Quatro níveis, <span>em ordem</span></h2>
+  <div class="road">
+    <div class="lv"><div class="dot">1</div><h3>Iniciante</h3><div class="when">Meses 1–3</div><p>Fundamentos, estruturas de dados, arquivos, erros, Git.</p></div>
+    <div class="lv"><div class="dot">2</div><h3>Intermediário</h3><div class="when">Meses 4–6</div><p>POO, APIs, scraping, SQL, NumPy, Pandas, gráficos.</p></div>
+    <div class="lv"><div class="dot">3</div><h3>Avançado</h3><div class="when">Meses 7–9</div><p>Excel, Power BI, automação, Streamlit, dashboards.</p></div>
+    <div class="lv"><div class="dot">4</div><h3>Especialista</h3><div class="when">Meses 10–12</div><p>Machine Learning, IA Generativa, FastAPI, Docker.</p></div>
+  </div>
+  <p class="muted" style="margin-top:auto">Ao fim do nível 2 você já pode disputar vagas de Analista de Dados júnior.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>6</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="kicker">Nível 1 · meses 1–3</div>
+  <h2>Iniciante</h2>
+  <div class="grid2" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><span class="tag">Módulo 1</span><h3>Fundamentos</h3><p>Lógica, variáveis, operadores, condicionais, loops</p></div>
+    <div class="card"><span class="tag">Módulo 2</span><h3>Estruturas e funções</h3><p>Funções, listas, tuplas, dicionários, sets</p></div>
+    <div class="card"><span class="tag">Módulo 3</span><h3>Programas robustos</h3><p>Arquivos, tratamento de erros, Git e GitHub</p></div>
+  </div>
+  <p style="margin-top:30px"><b>Meta:</b> escrever programas completos sozinho e versionar tudo no GitHub.</p>
+  <p class="muted">Ferramentas: Python 3.12+, VS Code, Jupyter, Git · Referência: júnior R$ 3.500 – 7.000</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="kicker">Nível 2 · meses 4–6</div>
+  <h2>Intermediário</h2>
+  <div class="grid2" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><span class="tag">Módulo 4</span><h3>POO e integrações</h3><p>Orientação a Objetos, APIs, Web Scraping</p></div>
+    <div class="card"><span class="tag">Módulo 5</span><h3>Dados com Python</h3><p>SQL com Python, NumPy, Pandas</p></div>
+    <div class="card"><span class="tag">Módulo 6</span><h3>Visualização</h3><p>Matplotlib, Seaborn</p></div>
+  </div>
+  <p style="margin-top:30px"><b>Meta:</b> buscar, limpar, consultar e visualizar dados reais de ponta a ponta.</p>
+  <p class="muted">Ferramentas: requests, BeautifulSoup, SQLAlchemy, PostgreSQL, Pandas · Referência: R$ 4.000 – 12.000</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="kicker">Nível 3 · meses 7–9</div>
+  <h2>Avançado</h2>
+  <div class="grid2" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><span class="tag">Módulo 7</span><h3>Excel e BI</h3><p>Excel com Python, Power BI com Python</p></div>
+    <div class="card"><span class="tag">Módulo 8</span><h3>Automação</h3><p>Arquivos, e-mails, agendamentos, web</p></div>
+    <div class="card"><span class="tag">Módulo 9</span><h3>Apps de dados</h3><p>Streamlit, Dashboards</p></div>
+  </div>
+  <p style="margin-top:30px"><b>Meta:</b> entregar relatórios automáticos e dashboards que outras pessoas usam.</p>
+  <p class="muted">Ferramentas: openpyxl, Power Query, Playwright, Streamlit, Plotly · Referência: R$ 5.500 – 12.000</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="kicker">Nível 4 · meses 10–12</div>
+  <h2>Especialista</h2>
+  <div class="grid2" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><span class="tag">Módulo 10</span><h3>Machine Learning</h3><p>scikit-learn, avaliação de modelos, pipelines</p></div>
+    <div class="card"><span class="tag">Módulo 11</span><h3>IA Generativa</h3><p>LLMs via API, RAG, agentes simples</p></div>
+    <div class="card"><span class="tag">Módulo 12</span><h3>Produção</h3><p>FastAPI, Docker, deploy</p></div>
+  </div>
+  <p style="margin-top:30px"><b>Meta:</b> colocar modelos e serviços em produção, como um time profissional.</p>
+  <p class="muted">Ferramentas: XGBoost, MLflow, LangChain, Pydantic, Docker Compose · Referência: R$ 9.000 – 18.000+</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>10</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="kicker">Rotina</div>
+  <h2>11 horas por semana</h2>
+  <table>
+    <tbody>
+      <tr><td><b>Seg</b></td><td class="num">1h30</td><td>Teoria, exemplos, erros comuns, resumo</td></tr>
+      <tr><td><b>Ter</b></td><td class="num">1h30</td><td>Digitar e rodar todos os exemplos</td></tr>
+      <tr><td><b>Qua</b></td><td class="num">1h30</td><td>Exercícios básicos e intermediários → correção</td></tr>
+      <tr><td><b>Qui</b></td><td class="num">1h30</td><td>Exercícios avançados + flashcards</td></tr>
+      <tr><td><b>Sex</b></td><td class="num">1h</td><td>Revisão espaçada</td></tr>
+      <tr><td><b>Sáb</b></td><td class="num">3h</td><td>Mini projeto + desafio, commit no GitHub</td></tr>
+      <tr><td><b>Dom</b></td><td class="num">1h</td><td>Ler código de outras pessoas</td></tr>
+    </tbody>
+  </table>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>11</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <div class="kicker">Portfólio</div>
+  <h2>8 projetos no GitHub</h2>
+  <div class="grid2" style="gap:14px 40px">
+    <ul style="list-style:none;padding:0">
+      <li><b>1.</b> Calculadora de salário líquido</li>
+      <li><b>2.</b> Organizador automático de pastas</li>
+      <li><b>3.</b> Monitor de preços com alerta</li>
+      <li><b>4.</b> Análise de vendas (dataset Olist)</li>
+    </ul>
+    <ul style="list-style:none;padding:0">
+      <li><b>5.</b> Relatório Excel com um clique</li>
+      <li><b>6.</b> Dashboard de KPIs em Streamlit</li>
+      <li><b>7.</b> Previsão de churn com API</li>
+      <li><b>8.</b> Assistente de PDFs (RAG) em Docker</li>
+    </ul>
+  </div>
+  <p class="muted" style="margin-top:24px">Recrutadores olham o GitHub antes do currículo em vagas júnior.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>12</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide dark">
+  <div class="kicker">Aula 1</div>
+  <h1 style="font-size:76px">Lógica de<br><span>Programação</span></h1>
+  <p class="lead muted" style="margin-top:28px">Transformar um problema em passos pequenos, claros e em ordem.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>13</span></div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="kicker">Aula 1 · como se você tivesse 10 anos</div>
+  <h2>O robô obediente</h2>
+  <p class="lead">O computador obedece, mas não pensa sozinho. “Faz um sanduíche” trava o robô.</p>
+  <p class="lead">Você precisa dizer: pegue o pão → abra o pão → passe manteiga → coloque o queijo → feche o pão.</p>
+  <p class="lead" style="margin-top:12px"><b>Lógica é dar ordens tão claras que até o robô entende.</b></p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>14</span></div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <div class="kicker">Aula 1 · explicação técnica</div>
+  <h2>Três estruturas fazem <span>todo</span> algoritmo</h2>
+  <div class="grid2" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card hl"><h3>Sequência</h3><p>Instruções executadas uma após a outra.</p></div>
+    <div class="card hl"><h3>Decisão</h3><p>Escolher um caminho por uma condição: <code>if / elif / else</code>.</p></div>
+    <div class="card hl"><h3>Repetição</h3><p>Repetir um bloco: <code>for</code> (vezes conhecidas) e <code>while</code> (até mudar).</p></div>
+  </div>
+  <p style="margin-top:30px">Método profissional: entender → entrada e saída → pseudocódigo → teste à mão → código.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>15</span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <div class="kicker">Aula 1 · exemplo real</div>
+  <h2>Aprovado ou reprovado?</h2>
+<pre><span class="c"># Entrada: duas notas | Saída: mensagem</span>
+nota1 = <span class="n">float</span>(<span class="n">input</span>(<span class="s">"Nota 1: "</span>))   <span class="c"># sequência</span>
+nota2 = <span class="n">float</span>(<span class="n">input</span>(<span class="s">"Nota 2: "</span>))
+media = (nota1 + nota2) / 2
+
+<span class="k">if</span> media >= 7:                       <span class="c"># decisão</span>
+    <span class="n">print</span>(<span class="s">f"Aprovado com média {media:.1f}"</span>)
+<span class="k">else</span>:
+    <span class="n">print</span>(<span class="s">f"Reprovado com média {media:.1f}"</span>)</pre>
+  <p class="muted" style="margin-top:18px;font-size:19px">Erro clássico: usar <code>&gt;</code> no lugar de <code>&gt;=</code> e reprovar quem tirou 7,0.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>16</span></div>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <div class="kicker">Aula 1 · como empresas usam</div>
+  <h2>Lógica no dia a dia das empresas</h2>
+  <ul>
+    <li><b>Banco:</b> SE renda ≥ 3× parcela E score ≥ 600 → aprova crédito.</li>
+    <li><b>iFood:</b> PARA CADA entregador próximo → escolhe o menor tempo.</li>
+    <li><b>E-commerce:</b> SE carrinho ≥ R$ 199 → frete grátis.</li>
+    <li><b>RH:</b> PARA CADA funcionário → calcula horas extras e holerite.</li>
+  </ul>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>17</span></div>
+</section>
+
+<!-- 18 -->
+<section class="slide">
+  <div class="kicker">Aula 1 · mapa mental</div>
+  <h2>Tudo numa tela</h2>
+<pre>LÓGICA DE PROGRAMAÇÃO
+ ├─→ Problema → Entrada → Processamento → Saída
+ ├─→ Sequência → um passo após o outro
+ ├─→ Decisão → if / elif / else → Verdadeiro ou Falso
+ ├─→ Repetição → for (quantidade conhecida)
+ │             → while (até a condição mudar) → cuidado: loop infinito
+ └─→ Método → entender → pseudocódigo → teste à mão → código</pre>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>18</span></div>
+</section>
+
+<!-- 19 -->
+<section class="slide">
+  <div class="kicker">Aula 1 · pratique</div>
+  <h2>Exercícios e desafio</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Exercícios</h3>
+      <ul>
+        <li><b>B1–B3:</b> caixa eletrônico, par/ímpar, idade para votar</li>
+        <li><b>I1–I3:</b> maior/menor, tabuada, senha com 3 tentativas</li>
+        <li><b>A1–A3:</b> número primo, troco, jogo de adivinhar</li>
+      </ul>
+    </div>
+    <div class="card hl">
+      <h3>Desafio empresarial</h3>
+      <p>Fintech: renda ≥ R$ 2.000, parcela ≤ 30% da renda, sem dívida em atraso, idade 18–75. Responda “Aprovado” ou o motivo exato da recusa, com 5 casos de teste.</p>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:22px">Mini projeto: calculadora de salário líquido (INSS + IR) publicada no GitHub.</p>
+  <div class="foot"><span>Python do Zero ao Especialista</span><span>19</span></div>
+</section>
+
+<!-- 20 -->
+<section class="slide dark">
+  <div class="kicker">Próximo passo</div>
+  <h2 style="color:#f3f1ea">Envie suas respostas<br>e peça a <span>próxima aula</span></h2>
+  <p class="lead muted">Cada resposta recebe nota de 0 a 10, correção linha a linha e a versão profissional do código.</p>
+  <p class="muted" style="margin-top:auto">Aula 2: Variáveis</p>
+</section>
+
+</div>
+</div>
+<div class="controls" aria-label="Navegação">
+  <button type="button" id="prev" aria-label="Slide anterior">←</button>
+  <span id="count">1 / 20</span>
+  <button type="button" id="next" aria-label="Próximo slide">→</button>
+  <button type="button" id="fs" aria-label="Tela cheia">⛶</button>
+  <a href="index.html">Plano</a>
+</div>
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var deck=document.getElementById('deck'), count=document.getElementById('count'), bar=document.getElementById('progress');
+  var i=0;
+  var h=parseInt(location.hash.replace('#',''),10); if(h>=1&&h<=slides.length) i=h-1;
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i);});
+    count.textContent=(i+1)+' / '+slides.length;
+    bar.style.width=((i+1)/slides.length*100)+'%';
+    history.replaceState(null,'','#'+(i+1));
+  }
+  function fit(){
+    var s=Math.min(window.innerWidth/1300, window.innerHeight/760);
+    deck.style.transform='scale('+s+')';
+  }
+  document.addEventListener('keydown',function(e){
+    if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>-1){e.preventDefault();show(i+1);}
+    if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>-1){e.preventDefault();show(i-1);}
+    if(e.key==='Home')show(0); if(e.key==='End')show(slides.length-1);
+    if(e.key==='f')toggleFs();
+  });
+  function toggleFs(){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();} else {document.exitFullscreen();} }
+  document.getElementById('prev').onclick=function(){show(i-1);};
+  document.getElementById('next').onclick=function(){show(i+1);};
+  document.getElementById('fs').onclick=toggleFs;
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){ if(x0===null)return; var dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>40) show(i+(dx<0?1:-1)); x0=null; });
+  window.addEventListener('resize',fit); fit(); show(i);
+})();
+</script>
+</body>
+</html>
